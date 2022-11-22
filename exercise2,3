@@ -1,0 +1,68 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Heap {
+public:
+    int N = 0;
+    vector<int> heap = { 0 };
+    int top() {
+        return heap[1];
+    }
+
+    void Add(int k) {
+        heap.push_back(k); 
+        this->N++;
+        swim(heap.size() - 1);
+    }
+
+    void Remove() {
+        heap[1] = heap.back(); 
+        heap.pop_back();
+        this->N--;
+        sink(1);
+    }
+
+    void swim(int pos) {
+        while (pos > 1 && heap[pos / 2] < heap[pos]) {  
+            swap(heap[pos / 2], heap[pos]);
+            pos /= 2; 
+        }
+    }
+
+    void sink(int pos) {
+        int i;
+        while (2 * pos <= N) {
+            i = 2 * pos;
+            if (i < N && heap[i] < heap[i + 1]) i++; 
+            if (heap[pos] >= heap[i]) break; 
+            swap(heap[pos], heap[i]);
+            pos = i;
+        }
+    }
+
+    void print() {
+        cout << "print all the values of the heap:" << endl;
+        for (const auto& num : heap) {
+            cout << num << " ";
+        }
+        cout << endl;
+    }
+};
+
+void test() {
+    Heap* heap = new Heap();
+    heap->Add(2); heap->print();
+    heap->Add(17); heap->print();
+    heap->Add(7); heap->print();
+    heap->Add(3);
+    heap->Remove(); heap->print();
+    heap->Add(19);
+    heap->print();
+}
+
+int main() {
+    test();
+    return 0;
+}
